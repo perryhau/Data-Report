@@ -1,5 +1,5 @@
 # Data::Report::Plugin::Html.pm -- HTML plugin for Data::Report
-# RCS Info        : $Id: Html.pm,v 1.3 2006/04/29 19:52:31 jv Exp $
+# RCS Info        : $Id: Html.pm,v 1.4 2006/05/01 14:28:30 jv Exp $
 # Author          : Johan Vromans
 # Created On      : Thu Dec 29 15:46:47 2005
 # Last Modified By: Johan Vromans

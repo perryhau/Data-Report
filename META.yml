@@ -1,6 +1,6 @@
 ---
 name: Data-Report
-version: 0.01
+version: 0.02
 author:
   - Johan Vromans <jvromans@squirrel.nl>
 abstract: Framework for flexible reporting
@@ -13,10 +13,13 @@ generated_by: Module::Build version 0.28
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.2.html
   version: 1.2
+no_index:
+  package:
+    - DB
 provides:
   Data::Report:
     file: lib/Data/Report.pm
-    version: 0.01
+    version: 0.02
   Data::Report::API:
     file: lib/Data/Report/API.pm
   Data::Report::Base:

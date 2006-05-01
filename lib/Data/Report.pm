@@ -1,10 +1,10 @@
 # Data::Reporter.pm -- Framework for flexible reporting
-# RCS Info        : $Id: Report.pm,v 1.3 2006/04/29 19:25:11 jv Exp $
+# RCS Info        : $Id: Report.pm,v 1.4 2006/05/01 14:27:33 jv Exp $
 # Author          : Johan Vromans
 # Created On      : Wed Dec 28 13:18:40 2005
 # Last Modified By: Johan Vromans
-# Last Modified On: Mon May  1 16:04:41 2006
-# Update Count    : 217
+# Last Modified On: Mon May  1 23:08:04 2006
+# Update Count    : 218
 # Status          : Unknown, Use with caution!
 
 package Data::Report;
@@ -15,11 +15,11 @@ Data::Report - Framework for flexible reporting
 
 =head1 VERSION
 
-0.01
+0.02
 
 =cut
 
-$VERSION = 0.01;
+$VERSION = 0.02;
 
 =head1 SYNOPSIS
 

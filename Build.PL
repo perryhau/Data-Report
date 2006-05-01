@@ -1,4 +1,4 @@
-# $Id$
+# $Id: Build.PL,v 1.2 2006/05/01 14:29:52 jv Exp $
 
 use strict;
 use Module::Build 0.28;
@@ -30,6 +30,10 @@ my $builder = Module::Build->new(
 	'pod2htm*',
 	map { +"t/*.$_" } qw(out)
     ],
+
+    meta_add            => {
+      no_index          => { package => [ qw(DB) ] },
+    },
 );
 
 $builder->create_build_script;
