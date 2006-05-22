@@ -1,10 +1,10 @@
 # Data::Report::Base.pm -- Base class for reporters
-# RCS Info        : $Id: Base.pm,v 1.5 2006/05/01 19:08:24 jv Exp $
+# RCS Info        : $Id: Base.pm,v 1.8 2006/05/22 20:02:34 jv Exp $
 # Author          : Johan Vromans
 # Created On      : Wed Dec 28 13:18:40 2005
 # Last Modified By: Johan Vromans
-# Last Modified On: Mon May  1 21:07:51 2006
-# Update Count    : 298
+# Last Modified On: Mon May 22 19:18:27 2006
+# Update Count    : 307
 # Status          : Unknown, Use with caution!
 
 package Data::Report::Base;
@@ -31,10 +31,11 @@ sub new {
     my ($class, $args) = @_;
     $class = ref($class) || $class;
 
-    delete($args->{type});
+    my $type = delete($args->{type});
     my $style = delete($args->{style}) || "default";
 
-    my $self = bless { _base_fields => [],
+    my $self = bless { _base_type   => lc($type),
+		       _base_fields => [],
 		       _base_fdata  => {},
 		       _base_style  => $style,
 		     }, $class;
@@ -65,6 +66,8 @@ sub start {
 
     $self->set_output(*STDOUT) unless $self->{_base_out};
     $self->set_style("default") unless $self->{_base_style};
+    $self->set_topheading($self->can("_top_heading"))
+      unless $self->{_base_topheading};
     $self->set_heading($self->can("_std_heading"))
       unless $self->{_base_heading};
     $self->set_stylist($self->can("_std_stylist"))
@@ -102,6 +105,10 @@ sub close {
 }
 
 ################ Attributes ################
+
+#### Type
+
+sub get_type { shift->{_base_type} }
 
 #### Style
 
@@ -269,6 +276,20 @@ sub get_heading {
     $self->{_base_heading};
 }
 
+sub set_topheading {
+    my ($self, $heading_code) = @_;
+    $self->_argcheck(1);
+    croak("Header must be a function (code ref)")
+      if $heading_code && !UNIVERSAL::isa($heading_code, 'CODE');
+    $self->{_base_topheading} = $heading_code;
+}
+
+sub get_topheading {
+    my ($self) = @_;
+    $self->_argcheck(0);
+    $self->{_base_topheading} || sub {};
+}
+
 ################ Friend methods ################
 
 sub _argcheck {
@@ -327,6 +348,8 @@ sub _checkhdr {
     $self->_argcheck(0);
     if ( $self->{_base_needhdr} ) {
 	$self->{_base_needhdr} = 0;
+	$self->_pageskip if $self->can("_pageskip");
+	$self->get_topheading->($self);
 	$self->get_heading->($self);
     }
 }

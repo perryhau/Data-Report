@@ -1,10 +1,10 @@
 # Data::Report::Plugin::Text.pm -- Text plugin for Data::Report
-# RCS Info        : $Id: Text.pm,v 1.4 2006/05/01 14:28:41 jv Exp $
+# RCS Info        : $Id: Text.pm,v 1.6 2006/05/22 20:02:18 jv Exp $
 # Author          : Johan Vromans
 # Created On      : Wed Dec 28 13:21:11 2005
 # Last Modified By: Johan Vromans
-# Last Modified On: Mon May  1 14:34:06 2006
-# Update Count    : 118
+# Last Modified On: Mon May 22 21:46:45 2006
+# Update Count    : 135
 # Status          : Unknown, Use with caution!
 
 package Data::Report::Plugin::Text;
@@ -38,6 +38,7 @@ sub add {
     my $line_after = 0;
     my $cancel_skip = 0;
     if ( $style and my $t = $self->_getstyle($style) ) {
+	return	     if $t->{ignore};
 	$self->_skip if $t->{skip_before};
 	$skip_after   = $t->{skip_after};
 	$self->_line if $t->{line_before};
@@ -63,10 +64,18 @@ sub add {
 
 	# Examine style mods.
 	my $indent = 0;
+	my $wrapindent = 0;
 	my $excess = 0;
 	if ( $style ) {
 	    if ( my $t = $self->_getstyle($style, $fname) ) {
 		$indent = $t->{indent} || 0;
+		$wrapindent = defined($t->{wrap_indent}) ? $t->{wrap_indent} : $indent;
+		croak("Row $style, column $fname, ".
+		      "illegal value for indent property: $indent")
+		  if $indent < 0 || $indent >= $self->_get_fdata->{$fname}->{width};
+		croak("Row $style, column $fname, ".
+		      "illegal value for wrap_indent property: $wrapindent")
+		  if $wrapindent < 0 || $wrapindent >= $self->_get_fdata->{$fname}->{width};
 		if ( $t->{line_before} ) {
 		    $linebefore->{$fname} =
 		      ($t->{line_before} eq "1" ? "-" : $t->{line_before}) x $col->{width};
@@ -83,7 +92,7 @@ sub add {
 		}
 	    }
 	}
-	push(@indents, $indent);
+	push(@indents, [$indent, $wrapindent]);
 
     }
 
@@ -96,7 +105,8 @@ sub add {
 	my $more = 0;
 	my @v;
 	foreach my $i ( 0..$#widths ) {
-	    my $ind = $indents[$i];
+	    my ($ind, $wind) = @{$indents[$i]};
+	    $ind = $wind if @lines;
 	    my $maxw = $widths[$i] - $ind;
 	    $ind = " " x $ind;
 	    if ( length($values[$i]) <= $maxw ) {
@@ -132,7 +142,6 @@ sub add {
 	$self->_checkhdr;
     }
     $self->_print(@lines);
-    $self->{lines} -= @lines;
 
     # Post: Lines for cells.
     if ( $lineafter ) {
@@ -175,12 +184,22 @@ sub _std_heading {
     $self->_print($t);
 
     $self->_needskip(0);
-    my $cnt = $t =~ tr/\n/\n/;
-    $self->{lines} = $self->{page} - $cnt;
 
 }
 
 ################ Internal methods ################
+
+sub _print {
+    my ($self, @values) = @_;
+    my $value = join("", @values);
+    $self->SUPER::_print($value);
+    $self->{lines} -= ($value =~ tr/\n//);
+}
+
+sub _pageskip {
+    my ($self) = @_;
+    $self->{lines} = $self->{page};
+}
 
 sub _make_format {
     my ($self) = @_;
@@ -215,7 +234,7 @@ sub _make_format {
 sub _checkskip {
     my ($self, $cancel) = @_;
     return if !$self->_does_needskip || $self->{lines} <= 0;
-    $self->{lines}--,$self->_print("\n") unless $cancel;
+    $self->_print("\n") unless $cancel;
     $self->_needskip(0);
 }
 
@@ -235,7 +254,6 @@ sub _line {
     $self->_checkskip(1);	# cancel skips.
 
     $self->_print("-" x ($self->{width}), "\n");
-    $self->{lines}--;
 }
 
 sub _skip {
