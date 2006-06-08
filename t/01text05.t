@@ -6,7 +6,7 @@ use Test::More qw(no_plan);
 
 use Data::Report;
 
-my $rep = Data::Report::->create(type => "text", stylist => \&my_stylist);
+my $rep = Data::Report::->create(type => "text");
 
 $rep->set_layout
   ([ { name => "one", title => "One",   width => 10, },
@@ -29,17 +29,6 @@ $rep->add({ one => $dd, two => $dd, thr => $dd, fou => $dd, fiv => $dd });
 $rep->finish;
 
 is($out, $ref);
-
-sub my_stylist {
-    my ($rep, $row, $col) = @_;
-
-    unless ( $col ) {
-	return { line_after => 1 } if $row eq "total";
-	return;
-    }
-    return { line_after => 1 } if $col eq "deb";
-    return;
-}
 
 __DATA__
 One         Two          Three         Four           Five

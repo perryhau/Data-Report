@@ -25,7 +25,7 @@ $dd = "$dd $dd $dd";
 
 $rep->set_output(\$out);
 $rep->start;
-$rep->add({ one => $dd, two => $dd, thr => $dd, fou => $dd, fiv => $dd, _style => 'foo' });
+$rep->add({ one => $dd, two => $dd, thr => $dd, fou => $dd, fiv => $dd });
 $rep->finish;
 
 is($out, $ref);

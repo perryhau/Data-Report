@@ -1,5 +1,5 @@
 # Data::Report::Plugin::Csv.pm -- CSV plugin for Data::Report
-# RCS Info        : $Id: Csv.pm,v 1.4 2006/05/22 16:40:40 jv Exp $
+# RCS Info        : $Id: Csv.pm,v 1.5 2006/06/06 20:33:41 jv Exp $
 # Author          : Johan Vromans
 # Created On      : Thu Jan  5 18:47:37 2006
 # Last Modified By: Johan Vromans
@@ -86,7 +86,7 @@ sub _set_csv_method {
     my ($self, $class) = @_;
     no warnings qw(redefine);
 
-    if ( $class && $class =~ /^Text::CSV_XS(?:::)?$/ ) {
+    if ( $class && $class->isa("Text::CSV_XS") ) {
 
 	# Use always_quote to be compatible with Text::CSV.
 	$csv_implementation = Text::CSV_XS->new
@@ -101,7 +101,7 @@ sub _set_csv_method {
 	    $csv_implementation->string;
 	};
     }
-    elsif ( $class && $class =~ /^Text::CSV(?:::)?$/ ) {
+    elsif ( $class && $class->isa("Text::CSV") ) {
 
 	$csv_implementation = Text::CSV->new;
 
