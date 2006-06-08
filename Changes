@@ -1,6 +1,10 @@
 Revision history for Data-Report
 
-0.04	2006-06-08
+0.05	2006-06-08
+
+	Better SYNOPSIS + doc fixes.
+
+0.04	2006-06-08 15:20
 
 	Under debian linux, Text::CSV seems to be a wrapper for
 	Text::CSV_XS which caused test t/03csv02.t to fail.

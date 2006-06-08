@@ -1,6 +1,6 @@
 ---
 name: Data-Report
-version: 0.04
+version: 0.05
 author:
   - Johan Vromans <jvromans@squirrel.nl>
 abstract: Framework for flexible reporting
@@ -19,7 +19,7 @@ no_index:
 provides:
   Data::Report:
     file: lib/Data/Report.pm
-    version: 0.04
+    version: 0.05
   Data::Report::Base:
     file: lib/Data/Report/Base.pm
   Data::Report::Plugin::Csv:
