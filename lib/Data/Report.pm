@@ -1,10 +1,10 @@
 # Data::Reporter.pm -- Framework for flexible reporting
-# RCS Info        : $Id: Report.pm,v 1.9 2006/05/23 09:36:17 jv Exp $
+# RCS Info        : $Id: Report.pm,v 1.12 2006/09/19 12:20:31 jv Exp $
 # Author          : Johan Vromans
 # Created On      : Wed Dec 28 13:18:40 2005
 # Last Modified By: Johan Vromans
-# Last Modified On: Thu Jun  8 15:34:00 2006
-# Update Count    : 246
+# Last Modified On: Tue Sep 19 14:19:46 2006
+# Update Count    : 249
 # Status          : Unknown, Use with caution!
 
 package Data::Report;
@@ -15,16 +15,18 @@ Data::Report - Framework for flexible reporting
 
 =head1 VERSION
 
-0.05
+0.06
 
 =cut
 
-$VERSION = 0.05;
+$VERSION = 0.06;
 
 =head1 SYNOPSIS
 
+  use Data::Report;
+
   # Create a new reporter.
-  my $rep = POC::Report::->create(type => "text"); # or "html", or "csv", ...
+  my $rep = Data::Report::->create(type => "text"); # or "html", or "csv", ...
 
   # Define the layout.
   $rep->set_layout
