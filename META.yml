@@ -1,6 +1,6 @@
 ---
 name: Data-Report
-version: 0.06
+version: 0.07
 author:
   - 'Johan Vromans <jvromans@squirrel.nl>'
 abstract: Framework for flexible reporting
@@ -14,7 +14,7 @@ recommends:
 provides:
   Data::Report:
     file: lib/Data/Report.pm
-    version: 0.06
+    version: 0.07
   Data::Report::Base:
     file: lib/Data/Report/Base.pm
   Data::Report::Plugin::Csv:
@@ -23,7 +23,7 @@ provides:
     file: lib/Data/Report/Plugin/Html.pm
   Data::Report::Plugin::Text:
     file: lib/Data/Report/Plugin/Text.pm
-generated_by: Module::Build version 0.28
+generated_by: Module::Build version 0.2808
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.2.html
   version: 1.2
