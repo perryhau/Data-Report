@@ -19,9 +19,11 @@ my $out = "";
 $rep->set_stylist(sub {
     my ($self, $row, $col) = @_;
     return { ignore => 1 } if $row && $row eq "total" && !$col;
+    return { ignore => 1 } if $col eq "deb";
     return;
 });
 $rep->set_output(\$out);
+$rep->set_separator(":") if $rep->get_type eq "csv";
 $rep->start;
 $rep->add({ acct => 1234, desc => "two", deb => "three", crd => "four" });
 $rep->add({ acct => 1235, desc => "two", deb => "three", crd => "four" });
@@ -36,7 +38,7 @@ $out =~ s/[\r\n]/\n/g;
 is($out, $ref);
 
 __DATA__
-"Acct","Report","Debet","Credit"
-"1234","two","three","four"
-"1235","two","three","four"
-"1236","two","three","four"
+"Acct":"Report":"Credit"
+"1234":"two":"four"
+"1235":"two":"four"
+"1236":"two":"four"

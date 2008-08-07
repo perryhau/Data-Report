@@ -4,9 +4,6 @@ use strict;
 use warnings;
 use Test::More;
 
-plan(skip_all => "Text::CSV_XS not found"), exit
-  unless eval { require Text::CSV_XS };
-
 plan(tests => 1);
 
 use Data::Report;
@@ -23,7 +20,7 @@ my $rep = Data::Report::->create
 my $out = "";
 $rep->set_stylist(sub {
     my ($self, $row, $col) = @_;
-    return { ignore => 1 } if $row eq "total" && !$col;
+    return { ignore => 1 } if $row && $row eq "total" && !$col;
     return;
 });
 $rep->set_output(\$out);

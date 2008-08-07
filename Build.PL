@@ -1,4 +1,4 @@
-# $Id: Build.PL,v 1.3 2006/05/22 13:31:44 jv Exp $
+# $Id: Build.PL,v 1.4 2008/08/07 14:50:31 jv Exp $
 
 use strict;
 use Module::Build 0.28;
@@ -16,6 +16,7 @@ my $builder = Module::Build->new(
 
     build_requires => {
         'Test::More' => 0,
+        'Text::CSV'  => 1.00,
     },
 
 #    auto_features => {
@@ -34,6 +35,7 @@ my $builder = Module::Build->new(
     meta_add            => {
       no_index          => { package => [ qw(DB) ] },
     },
+    create_makefile_pl => 'traditional',
 );
 
 $builder->create_build_script;

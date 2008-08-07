@@ -1,10 +1,10 @@
 # Data::Report::Plugin::Csv.pm -- CSV plugin for Data::Report
-# RCS Info        : $Id: Csv.pm,v 1.6 2008/08/07 12:22:22 jv Exp $
+# RCS Info        : $Id: Csv.pm,v 1.8 2008/08/07 20:05:00 jv Exp $
 # Author          : Johan Vromans
 # Created On      : Thu Jan  5 18:47:37 2006
 # Last Modified By: Johan Vromans
-# Last Modified On: Thu Aug  7 14:19:42 2008
-# Update Count    : 101
+# Last Modified On: Thu Aug  7 19:57:28 2008
+# Update Count    : 118
 # Status          : Unknown, Use with caution!
 
 package Data::Report::Plugin::Csv;
@@ -52,7 +52,12 @@ sub add {
     $line = $self->_csv
       ( map {
 	  $data->{$_->{name}} || ""
-        } @{$self->_get_fields}
+        }
+	grep {
+	    my $t = $self->_getstyle($style, $_->{name});
+	    ! $t->{ignore};
+	}
+	@{$self->_get_fields}
       );
     $self->_print($line, "\n");
 }
@@ -66,7 +71,17 @@ sub _std_heading {
     my ($self) = @_;
     my $sep = $self->get_separator;
 
-    $self->_print($self->_csv(map { $_->{title} } @{$self->_get_fields}), "\n");
+
+    $self->_print($self->_csv
+		  (map {
+		       $_->{title}
+		   }
+		   grep {
+		       my $t = $self->_getstyle("head", $_->{name});
+		       ! $t->{ignore};
+		   }
+		   @{$self->_get_fields}),
+		  "\n");
 }
 
 ################ Internal (used if no alternatives) ################
@@ -102,10 +117,18 @@ sub _set_csv_method {
 	    $csv_implementation->combine(@_);
 	    $csv_implementation->string;
 	};
+	warn("# CSV plugin uses Text::CSV_XS $Text::CSV_XS::VERSION\n")
+	  if $ENV{AUTOMATED_TESTING};
     }
     elsif ( $class && $class->isa("Text::CSV") ) {
 
-	$csv_implementation = Text::CSV->new;
+	# With modern Text::CSV, it will use Text::CSV_XS if possible.
+	# So this gotta be Text::CSV_PP...
+
+	$csv_implementation = Text::CSV->new
+	  ({ always_quote => 1,
+	     binary => 1,
+	   });
 
 	# Assign the method.
 	*_csv = sub {
@@ -113,11 +136,15 @@ sub _set_csv_method {
 	    $csv_implementation->combine(@_);
 	    $csv_implementation->string;
 	};
+	warn("# CSV plugin uses Text::CSV $Text::CSV::VERSION, PP version $Text::CSV_PP::VERSION\n")
+	  if $ENV{AUTOMATED_TESTING};
     }
     else {
 	# Use our internal method.
 	*_csv = \&_csv_internal;
 	$csv_implementation = "Data::Report::Plugin::Csv::_csv_internal";
+	warn("# CSV plugin uses built-in CSV packer\n")
+	  if $ENV{AUTOMATED_TESTING};
     }
 
     return $csv_implementation;
