@@ -1,10 +1,10 @@
 # Data::Report::Plugin::Text.pm -- Text plugin for Data::Report
-# RCS Info        : $Id: Text.pm,v 1.9 2008/08/07 20:05:00 jv Exp $
+# RCS Info        : $Id: Text.pm,v 1.10 2008/08/18 09:51:23 jv Exp $
 # Author          : Johan Vromans
 # Created On      : Wed Dec 28 13:21:11 2005
 # Last Modified By: Johan Vromans
-# Last Modified On: Thu Aug  7 21:49:33 2008
-# Update Count    : 147
+# Last Modified On: Mon Aug 18 11:46:04 2008
+# Update Count    : 149
 # Status          : Unknown, Use with caution!
 
 package Data::Report::Plugin::Text;
@@ -178,7 +178,7 @@ sub _std_heading {
     my $t = sprintf($self->{format},
 		    map { $_->{title} }
 		    grep {
-			my $t = $self->_getstyle("head", $_->{name});
+			my $t = $self->_getstyle("_head", $_->{name});
 			! $t->{ignore};
 		    }
 		    @{$self->_get_fields});
@@ -219,7 +219,7 @@ sub _make_format {
 
     foreach my $a ( @{$self->_get_fields} ) {
 
-	my $t = $self->_getstyle("head", $a->{name});
+	my $t = $self->_getstyle("_head", $a->{name});
 	next if $t->{ignore};
 
 	# Never mind the trailing blanks -- we'll trim anyway.

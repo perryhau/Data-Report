@@ -1,10 +1,10 @@
 # Data::Report::Plugin::Csv.pm -- CSV plugin for Data::Report
-# RCS Info        : $Id: Csv.pm,v 1.8 2008/08/07 20:05:00 jv Exp $
+# RCS Info        : $Id: Csv.pm,v 1.9 2008/08/18 09:51:23 jv Exp $
 # Author          : Johan Vromans
 # Created On      : Thu Jan  5 18:47:37 2006
 # Last Modified By: Johan Vromans
-# Last Modified On: Thu Aug  7 19:57:28 2008
-# Update Count    : 118
+# Last Modified On: Mon Aug 18 11:45:48 2008
+# Update Count    : 119
 # Status          : Unknown, Use with caution!
 
 package Data::Report::Plugin::Csv;
@@ -77,7 +77,7 @@ sub _std_heading {
 		       $_->{title}
 		   }
 		   grep {
-		       my $t = $self->_getstyle("head", $_->{name});
+		       my $t = $self->_getstyle("_head", $_->{name});
 		       ! $t->{ignore};
 		   }
 		   @{$self->_get_fields}),

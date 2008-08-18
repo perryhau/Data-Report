@@ -1,4 +1,4 @@
-# $Id: Build.PL,v 1.4 2008/08/07 14:50:31 jv Exp $
+# $Id: Build.PL,v 1.5 2008/08/07 20:20:03 jv Exp $
 
 use strict;
 use Module::Build 0.28;
